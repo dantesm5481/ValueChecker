@@ -1,0 +1,3099 @@
+-- MySQL dump 10.13  Distrib 5.7.17, for osx10.11 (x86_64)
+--
+-- Host: pzx.prj.tw    Database: twdb
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.1.15-MariaDB-1~jessie
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `AfterHour`
+--
+
+DROP TABLE IF EXISTS `AfterHour`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AfterHour` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `BidTx` double DEFAULT NULL,
+  `BidVol` double DEFAULT NULL,
+  `AskTx` double DEFAULT NULL,
+  `AskVol` double DEFAULT NULL,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `Txs` bigint(20) DEFAULT NULL,
+  `Amount` double DEFAULT NULL,
+  `BestBidVol` bigint(20) DEFAULT NULL,
+  `BestAskVol` bigint(20) DEFAULT NULL,
+  `Market` varchar(20),
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `AfterHour_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `AuditSum`
+--
+
+DROP TABLE IF EXISTS `AuditSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AuditSum` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` varchar(20),
+  `Market` varchar(20),
+  `VisaCPA` varchar(80),
+  `VisaAccountant` varchar(40),
+  `VisaAccountant2` varchar(40),
+  `AccountantAuditDate` date DEFAULT NULL,
+  `AccountantAuditType` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `AuditSum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Bonds`
+--
+
+DROP TABLE IF EXISTS `Bonds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Bonds` (
+  `Date` date DEFAULT NULL,
+  `Bond` varchar(128) NOT NULL,
+  `BondName` text,
+  `Market` text,
+  `ProdType` text,
+  `Sect` text,
+  `PubDate` date DEFAULT NULL,
+  `MaturityDate` date DEFAULT NULL,
+  `Rate` double DEFAULT NULL,
+  `IsinCode` text,
+  `CFICode` text,
+  `AliasList` text,
+  PRIMARY KEY (`Bond`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `BrkHugeTrade`
+--
+
+DROP TABLE IF EXISTS `BrkHugeTrade`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `BrkHugeTrade` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `HugeType` text,
+  `BrkId` text,
+  `Price` double DEFAULT NULL,
+  `BuyVol` bigint(20) DEFAULT NULL,
+  `SellVol` bigint(20) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `BrkHugeTrade_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `BrkTrade`
+--
+
+DROP TABLE IF EXISTS `BrkTrade`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `BrkTrade` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `BrkId` varchar(128) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL,
+  `Price` double DEFAULT NULL,
+  `BuyVol` bigint(20) DEFAULT NULL,
+  `SellVol` bigint(20) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `Symbol` (`Symbol`,`Date`),
+  KEY `BrkTrade_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+/*!50500 PARTITION BY RANGE  COLUMNS(`Date`)
+SUBPARTITION BY LINEAR HASH (MONTH(Date))
+SUBPARTITIONS 12
+(PARTITION p2014 VALUES LESS THAN ('2015-01-01') ENGINE = InnoDB,
+ PARTITION p2015 VALUES LESS THAN ('2016-01-01') ENGINE = InnoDB,
+ PARTITION p2016 VALUES LESS THAN ('2017-01-01') ENGINE = InnoDB,
+ PARTITION p2017 VALUES LESS THAN ('2018-01-01') ENGINE = InnoDB,
+ PARTITION p2018 VALUES LESS THAN ('2019-01-01') ENGINE = InnoDB,
+ PARTITION p2019 VALUES LESS THAN ('2020-01-01') ENGINE = InnoDB,
+ PARTITION p2020 VALUES LESS THAN ('2021-01-01') ENGINE = InnoDB,
+ PARTITION p2021 VALUES LESS THAN ('2022-01-01') ENGINE = InnoDB,
+ PARTITION p2022 VALUES LESS THAN ('2023-01-01') ENGINE = InnoDB,
+ PARTITION p2023 VALUES LESS THAN ('2024-01-01') ENGINE = InnoDB,
+ PARTITION p2024 VALUES LESS THAN ('2025-01-01') ENGINE = InnoDB,
+ PARTITION p2025 VALUES LESS THAN ('2026-01-01') ENGINE = InnoDB,
+ PARTITION p2026 VALUES LESS THAN ('2027-01-01') ENGINE = InnoDB,
+ PARTITION p2027 VALUES LESS THAN ('2028-01-01') ENGINE = InnoDB,
+ PARTITION p2028 VALUES LESS THAN ('2029-01-01') ENGINE = InnoDB,
+ PARTITION p2029 VALUES LESS THAN ('2030-01-01') ENGINE = InnoDB,
+ PARTITION p2030 VALUES LESS THAN ('2031-01-01') ENGINE = InnoDB,
+ PARTITION p2031 VALUES LESS THAN ('2032-01-01') ENGINE = InnoDB,
+ PARTITION pmax VALUES LESS THAN (MAXVALUE) ENGINE = InnoDB) */;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Brokers`
+--
+
+DROP TABLE IF EXISTS `Brokers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Brokers` (
+  `Date` date DEFAULT NULL,
+  `BrkId` varchar(128) CHARACTER SET latin1 COLLATE latin1_general_cs NOT NULL,
+  `Brk` text,
+  `HeadBrk` text,
+  `BrkFullName` text,
+  `InaugurationDate` date DEFAULT NULL,
+  `Address` text,
+  `Telephone` text,
+  `RegisteredCapital` double DEFAULT NULL,
+  `PaidInCap` double DEFAULT NULL,
+  `EarnMarkedAccount` double DEFAULT NULL,
+  `ModifyDate` date DEFAULT NULL,
+  `AreaCode` text,
+  `MarginTradeStartDate` date DEFAULT NULL,
+  `EstablishDate` date DEFAULT NULL,
+  `Fax` text,
+  `SettlementInstitution` text,
+  `ProxySettlementBrk` text,
+  `IPOstatus` text,
+  `BusinessType` text,
+  `President` text,
+  `GM` text,
+  `Manager` text,
+  `PremisesAddr` text,
+  `PremisesRepAddr` text,
+  `PremisesOfficeAddr` text,
+  `DealerAddr` text,
+  `DealerRepAddr` text,
+  `UnderwriterAddr` text,
+  `UnderwriterRepAddr` text,
+  `ServiceAddr` text,
+  `BusinessItem` text,
+  `Note` text,
+  PRIMARY KEY (`BrkId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CapRedtn`
+--
+
+DROP TABLE IF EXISTS `CapRedtn`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CapRedtn` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `PreClose` double DEFAULT NULL,
+  `CapRedtnPriceRef` double DEFAULT NULL,
+  `LimitUp` double DEFAULT NULL,
+  `LimitDown` double DEFAULT NULL,
+  `PriceRef` double DEFAULT NULL,
+  `CapRedtnReason` text,
+  `SuspDate` date DEFAULT NULL,
+  `ReissueShare` double DEFAULT NULL,
+  `RetOfCap` double DEFAULT NULL,
+  `CapIncVol` bigint(20) DEFAULT NULL,
+  `CapIncPrice` double DEFAULT NULL,
+  `CapIncAllotment` double DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `CapRedtn_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CashFlows`
+--
+
+DROP TABLE IF EXISTS `CashFlows`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CashFlows` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `MopsFinanceAmount` double DEFAULT NULL,
+  `MopsFinancePrevAmount` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `CashFlows_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ChinaInvest`
+--
+
+DROP TABLE IF EXISTS `ChinaInvest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ChinaInvest` (
+  `Date` date NOT NULL,
+  `Market` text,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `ChinaCompany` text,
+  `MajOpItem` text,
+  `PaidInCap` double DEFAULT NULL,
+  `InvestType` text,
+  `PreAccInvest` double DEFAULT NULL,
+  `InvestRemit` double DEFAULT NULL,
+  `InvestRecovery` double DEFAULT NULL,
+  `AccInvest` double DEFAULT NULL,
+  `HoldRatio` double DEFAULT NULL,
+  `InvestIncome_s` text,
+  `InvestBookValue` double DEFAULT NULL,
+  `AccInvestIncome` double DEFAULT NULL,
+  `AllAccInvest` double DEFAULT NULL,
+  `InvestAmt_MOEA` double DEFAULT NULL,
+  `InvestLimit` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `ChinaInvest_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CsCashFlows`
+--
+
+DROP TABLE IF EXISTS `CsCashFlows`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CsCashFlows` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `MopsFinanceAmount` double DEFAULT NULL,
+  `MopsFinancePrevAmount` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `CsCashFlows_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CsFPos`
+--
+
+DROP TABLE IF EXISTS `CsFPos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CsFPos` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `MopsFinanceAmount` double DEFAULT NULL,
+  `MopsFinancePercent` double DEFAULT NULL,
+  `MopsFinancePrevAmount` double DEFAULT NULL,
+  `MopsFinancePrevPercent` double DEFAULT NULL,
+  `MopsFinanceLastYearAmount` double DEFAULT NULL,
+  `MopsFinanceLastYearPercent` double DEFAULT NULL,
+  `MopsFinanceLastYearPrevAmount` double DEFAULT NULL,
+  `MopsFinanceLastYearPrevPercent` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `CsFPos_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CsFPosSum`
+--
+
+DROP TABLE IF EXISTS `CsFPosSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CsFPosSum` (
+  `Market` text,
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `AccountPayable` double DEFAULT NULL,
+  `AccruedPensionLiab` double DEFAULT NULL,
+  `Asset` double DEFAULT NULL,
+  `AssetHeldForSale` double DEFAULT NULL,
+  `BondPayable` double DEFAULT NULL,
+  `CapSurplus` double DEFAULT NULL,
+  `Cash_CashEquiv` double DEFAULT NULL,
+  `ClientPositionCredit` double DEFAULT NULL,
+  `ClientPositionDebit` double DEFAULT NULL,
+  `CurrentAsset` double DEFAULT NULL,
+  `CurrentLiab` double DEFAULT NULL,
+  `DepositFromCBC_Banks` double DEFAULT NULL,
+  `Deposit_Remittance` double DEFAULT NULL,
+  `DueCentralBankAndLoanBanks` double DEFAULT NULL,
+  `DueToCBC_Banks` double DEFAULT NULL,
+  `Equity` double DEFAULT NULL,
+  `Equity_PreInvestor` double DEFAULT NULL,
+  `EquivIssueShare_CommonStk` bigint(20) DEFAULT NULL,
+  `EquivIssueShare_CommonStkDouble` double DEFAULT NULL,
+  `ExchangeRate` text,
+  `FLiab_FairValue` double DEFAULT NULL,
+  `FinanceLiab` double DEFAULT NULL,
+  `FixAsset` double DEFAULT NULL,
+  `Fund_Invest` double DEFAULT NULL,
+  `IntangibleAsset` double DEFAULT NULL,
+  `Investment` double DEFAULT NULL,
+  `Liab_HeldForSale` double DEFAULT NULL,
+  `Liability` double DEFAULT NULL,
+  `LocalCPAAudit` text,
+  `LongTermLiab` double DEFAULT NULL,
+  `MinorStockholderInterest` double DEFAULT NULL,
+  `NAVPS` double DEFAULT NULL,
+  `NetAccountReceivable` double DEFAULT NULL,
+  `NetDiscountedNote_Loan` double DEFAULT NULL,
+  `NetEquityInvest_EquityMethod` double DEFAULT NULL,
+  `NetFAsset_AFS` double DEFAULT NULL,
+  `NetFAsset_FairValue` double DEFAULT NULL,
+  `NetFAsset_HeldToMaturity` double DEFAULT NULL,
+  `NetNotePayable` double DEFAULT NULL,
+  `NetOtherFAsset` double DEFAULT NULL,
+  `NetPropertyInvest` double DEFAULT NULL,
+  `NetReinsuReserveAsset` double DEFAULT NULL,
+  `Note_BondRP` double DEFAULT NULL,
+  `Note_BondRS` double DEFAULT NULL,
+  `Op_LiabReserve` double DEFAULT NULL,
+  `OtherAsset` double DEFAULT NULL,
+  `OtherBorrowing` double DEFAULT NULL,
+  `OtherFLiab` double DEFAULT NULL,
+  `OtherLiab` double DEFAULT NULL,
+  `PrefStkLiab` double DEFAULT NULL,
+  `Provision` double DEFAULT NULL,
+  `RefExchangeRate` text,
+  `Reserves` double DEFAULT NULL,
+  `RetainedEarning` double DEFAULT NULL,
+  `SepaAccountInsuLiab` double DEFAULT NULL,
+  `SepaAccountProdAsset` double DEFAULT NULL,
+  `ShareCap` double DEFAULT NULL,
+  `ShareInEntityByEntityAndSub` double DEFAULT NULL,
+  `ShareInEntityByEntityAndSubDouble` double DEFAULT NULL,
+  `TotalAsset` double DEFAULT NULL,
+  `TotalEquity` double DEFAULT NULL,
+  `TotalEquity_Parent` double DEFAULT NULL,
+  `TotalLiab` double DEFAULT NULL,
+  `TotalOtherEquity` double DEFAULT NULL,
+  `TreasuryStk` double DEFAULT NULL,
+  `Loan` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `CsFPosSum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CsIncome`
+--
+
+DROP TABLE IF EXISTS `CsIncome`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CsIncome` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `MopsFinanceAmount` double DEFAULT NULL,
+  `MopsFinancePercent` double DEFAULT NULL,
+  `MopsFinancePrevAmount` double DEFAULT NULL,
+  `MopsFinancePrevPercent` double DEFAULT NULL,
+  `MopsFinanceAccuAmount` double DEFAULT NULL,
+  `MopsFinanceAccuPercent` double DEFAULT NULL,
+  `MopsFinancePrevAccuAmount` double DEFAULT NULL,
+  `MopsFinancePrevAccuPercent` double DEFAULT NULL,
+  `MopsFinancePctChanged` text,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CsIncomeSum`
+--
+
+DROP TABLE IF EXISTS `CsIncomeSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CsIncomeSum` (
+  `Market` text,
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Cost` double DEFAULT NULL,
+  `CsNetIncome` double DEFAULT NULL,
+  `CsTotalIncomMinor` double DEFAULT NULL,
+  `CsTotalIncomParent` double DEFAULT NULL,
+  `CsTotalIncome` double DEFAULT NULL,
+  `CumuChangeAccounting` double DEFAULT NULL,
+  `DilutedEPS` double DEFAULT NULL,
+  `EPS` double DEFAULT NULL,
+  `EarningsBInterest` double DEFAULT NULL,
+  `EquityIncomeOfPreInvestorUnderCommonCtrl` double DEFAULT NULL,
+  `ExchangeRate` text,
+  `Expense` double DEFAULT NULL,
+  `ExtraordinaryGainAndCumuChange` double DEFAULT NULL,
+  `ExtraordinaryGainLoss` double DEFAULT NULL,
+  `InterestExpense` double DEFAULT NULL,
+  `InterestIncome` double DEFAULT NULL,
+  `MinorGain` double DEFAULT NULL,
+  `NetInterestIncome` double DEFAULT NULL,
+  `NetOpRevenue` double DEFAULT NULL,
+  `NonOpExpense` double DEFAULT NULL,
+  `NonOpProfit` double DEFAULT NULL,
+  `OpExpense` double DEFAULT NULL,
+  `OpIncome` double DEFAULT NULL,
+  `OpRevGains` double DEFAULT NULL,
+  `ProfitContOpATax` double DEFAULT NULL,
+  `ProfitContOpBTax` double DEFAULT NULL,
+  `ProfitDiscontOp` double DEFAULT NULL,
+  `ProvisionForInsu` double DEFAULT NULL,
+  `RefExchangeRate` text,
+  `TaxExpense` double DEFAULT NULL,
+  `Revenue` double DEFAULT NULL,
+  `UncollectAccountExpense` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `CsIncomeSum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `CsRevenue`
+--
+
+DROP TABLE IF EXISTS `CsRevenue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `CsRevenue` (
+  `Date` date NOT NULL,
+  `Market` text,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Industry` text,
+  `CsMRevenue` double DEFAULT NULL,
+  `PreCsMRevenue` double DEFAULT NULL,
+  `PreYCsMRevenue` double DEFAULT NULL,
+  `CsMOM_pct` double DEFAULT NULL,
+  `CsYOY_pct` double DEFAULT NULL,
+  `AccsYRevenue` double DEFAULT NULL,
+  `PreAccsYRevenue` double DEFAULT NULL,
+  `AccsYOY_pct` double DEFAULT NULL,
+  `Note` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `CsRevenue_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `DayTrade`
+--
+
+DROP TABLE IF EXISTS `DayTrade`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DayTrade` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `RevVol` double DEFAULT NULL,
+  `RevBuyAmt` double DEFAULT NULL,
+  `RevSellAmt` double DEFAULT NULL,
+  `RevBuyAfterSusp` tinyint(1) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `DayTrade_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `DerivativeFV`
+--
+
+DROP TABLE IF EXISTS `DerivativeFV`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DerivativeFV` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `FStatCommodityType` text,
+  `MarginFut` double DEFAULT NULL,
+  `MarginSingleOptSell` double DEFAULT NULL,
+  `MarginSingleOptBuy` double DEFAULT NULL,
+  `MarginCompOptSell` double DEFAULT NULL,
+  `MarginCompOptBuy` double DEFAULT NULL,
+  `MarginForward` double DEFAULT NULL,
+  `MarginSwap` double DEFAULT NULL,
+  `MarginFVChg` double DEFAULT NULL,
+  `HedgeMarginOther` double DEFAULT NULL,
+  `PremiumFut` double DEFAULT NULL,
+  `PremiumSingleOptSell` double DEFAULT NULL,
+  `PremiumSingleOptBuy` double DEFAULT NULL,
+  `PremiumCompOptSell` double DEFAULT NULL,
+  `PremiumCompOptBuy` double DEFAULT NULL,
+  `PremiumForward` double DEFAULT NULL,
+  `PremiumSwap` double DEFAULT NULL,
+  `PremiumFVChg` double DEFAULT NULL,
+  `PremiumOther` double DEFAULT NULL,
+  `OIContractFut` double DEFAULT NULL,
+  `OIContractSingleOptSell` double DEFAULT NULL,
+  `OIContractSingleOptBuy` double DEFAULT NULL,
+  `OIContractCompOptSell` double DEFAULT NULL,
+  `OIContractCompOptBuy` double DEFAULT NULL,
+  `OIContractForward` double DEFAULT NULL,
+  `OIContractSwap` double DEFAULT NULL,
+  `OIContractFVChg` double DEFAULT NULL,
+  `OIContractOther` double DEFAULT NULL,
+  `OIFairFut` double DEFAULT NULL,
+  `OIFairSingleOptSell` double DEFAULT NULL,
+  `OIFairSingleOptBuy` double DEFAULT NULL,
+  `OIFairCompOptSell` double DEFAULT NULL,
+  `OIFairCompOptBuy` double DEFAULT NULL,
+  `OIFairForward` double DEFAULT NULL,
+  `OIFairSwap` double DEFAULT NULL,
+  `OIFairFVChg` double DEFAULT NULL,
+  `OIFairOther` double DEFAULT NULL,
+  `OIIncomeFut` double DEFAULT NULL,
+  `OIIncomeSingleOptSell` double DEFAULT NULL,
+  `OIIncomeSingleOptBuy` double DEFAULT NULL,
+  `OIIncomeCompOptSell` double DEFAULT NULL,
+  `OIIncomeCompOptBuy` double DEFAULT NULL,
+  `OIIncomeForward` double DEFAULT NULL,
+  `OIIncomeSwap` double DEFAULT NULL,
+  `OIIncomeFVChg` double DEFAULT NULL,
+  `OIIncomeOther` double DEFAULT NULL,
+  `OffsetContractFut` double DEFAULT NULL,
+  `OffsetContractSingleOptSell` double DEFAULT NULL,
+  `OffsetContractSingleOptBuy` double DEFAULT NULL,
+  `OffsetContractCompOptSell` double DEFAULT NULL,
+  `OffsetContractCompOptBuy` double DEFAULT NULL,
+  `OffsetContractForward` double DEFAULT NULL,
+  `OffsetContractSwap` double DEFAULT NULL,
+  `OffsetContractFVChg` double DEFAULT NULL,
+  `OffsetContractOther` double DEFAULT NULL,
+  `OffsetIncomeFut` double DEFAULT NULL,
+  `OffsetIncomeSingleOptSell` double DEFAULT NULL,
+  `OffsetIncomeSingleOptBuy` double DEFAULT NULL,
+  `OffsetIncomeCompOptSell` double DEFAULT NULL,
+  `OffsetIncomeCompOptBuy` double DEFAULT NULL,
+  `OffsetIncomeForward` double DEFAULT NULL,
+  `OffsetIncomeSwap` double DEFAULT NULL,
+  `OffsetIncomeFVChg` double DEFAULT NULL,
+  `OffsetIncomeOther` double DEFAULT NULL,
+  `NoteFut` text,
+  `NoteSingleOptSell` text,
+  `NoteSingleOptBuy` text,
+  `NoteCompOptSell` text,
+  `NoteCompOptBuy` text,
+  `NoteForward` text,
+  `NoteSwap` text,
+  `NoteFVChg` text,
+  `NoteOther` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `DerivativeFV_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `DerivativeFX`
+--
+
+DROP TABLE IF EXISTS `DerivativeFX`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DerivativeFX` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NotionalAmtBal_Otc_Trade_Rate` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_Trade_FX` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_Trade_Stock` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_Trade_Commodity` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_Trade_Credit` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_Trade_Other` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_NTrade_Rate` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_NTrade_FX` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_NTrade_Stock` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_NTrade_Commodity` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_NTrade_Credit` double DEFAULT NULL,
+  `NotionalAmtBal_Otc_NTrade_Other` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_Trade_Rate` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_Trade_FX` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_Trade_Stock` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_Trade_Commodity` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_Trade_Credit` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_Trade_Other` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_NTrade_Rate` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_NTrade_FX` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_NTrade_Stock` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_NTrade_Commodity` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_NTrade_Credit` double DEFAULT NULL,
+  `NotionalAmtBal_Tse_NTrade_Other` double DEFAULT NULL,
+  `FairValue_Trade_Sum_Rate` double DEFAULT NULL,
+  `FairValue_Trade_Sum_FX` double DEFAULT NULL,
+  `FairValue_Trade_Sum_Stock` double DEFAULT NULL,
+  `FairValue_Trade_Sum_Commodity` double DEFAULT NULL,
+  `FairValue_Trade_Sum_Credit` double DEFAULT NULL,
+  `FairValue_Trade_Sum_Other` double DEFAULT NULL,
+  `FairValue_Trade_NSum_Rate` double DEFAULT NULL,
+  `FairValue_Trade_NSum_FX` double DEFAULT NULL,
+  `FairValue_Trade_NSum_Stock` double DEFAULT NULL,
+  `FairValue_Trade_NSum_Commodity` double DEFAULT NULL,
+  `FairValue_Trade_NSum_Credit` double DEFAULT NULL,
+  `FairValue_Trade_NSum_Other` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeItem_Rate` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeItem_FX` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeItem_Stock` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeItem_Commodity` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeItem_Credit` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeItem_Other` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeTool_Rate` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeTool_FX` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeTool_Stock` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeTool_Commodity` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeTool_Credit` double DEFAULT NULL,
+  `FairValue_NTrade_HedgeTool_Other` double DEFAULT NULL,
+  `ReportedIncome_Trade_Rate` double DEFAULT NULL,
+  `ReportedIncome_Trade_FX` double DEFAULT NULL,
+  `ReportedIncome_Trade_Stock` double DEFAULT NULL,
+  `ReportedIncome_Trade_Commodity` double DEFAULT NULL,
+  `ReportedIncome_Trade_Credit` double DEFAULT NULL,
+  `ReportedIncome_Trade_Other` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeItem_Rate` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeItem_FX` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeItem_Stock` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeItem_Commodity` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeItem_Credit` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeItem_Other` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeTool_Rate` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeTool_FX` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeTool_Stock` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeTool_Commodity` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeTool_Credit` double DEFAULT NULL,
+  `ReportedIncome_NTrade_HedgeTool_Other` double DEFAULT NULL,
+  `NoteRate` text,
+  `NoteFX` text,
+  `NoteStock` text,
+  `NoteCommodity` text,
+  `NoteCredit` text,
+  `NoteOther` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `DerivativeFX_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `DerivativeFair`
+--
+
+DROP TABLE IF EXISTS `DerivativeFair`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `DerivativeFair` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `FStatCommodityType` text,
+  `MarginFut` double DEFAULT NULL,
+  `MarginSingleOptSell` double DEFAULT NULL,
+  `MarginSingleOptBuy` double DEFAULT NULL,
+  `MarginCompOptSell` double DEFAULT NULL,
+  `MarginCompOptBuy` double DEFAULT NULL,
+  `MarginForward` double DEFAULT NULL,
+  `MarginSwap` double DEFAULT NULL,
+  `MarginFair` double DEFAULT NULL,
+  `HedgeMarginOther` double DEFAULT NULL,
+  `PremiumFut` double DEFAULT NULL,
+  `PremiumSingleOptSell` double DEFAULT NULL,
+  `PremiumSingleOptBuy` double DEFAULT NULL,
+  `PremiumCompOptSell` double DEFAULT NULL,
+  `PremiumCompOptBuy` double DEFAULT NULL,
+  `PremiumForward` double DEFAULT NULL,
+  `PremiumSwap` double DEFAULT NULL,
+  `PremiumFair` double DEFAULT NULL,
+  `PremiumOther` double DEFAULT NULL,
+  `OIContractFut` double DEFAULT NULL,
+  `OIContractSingleOptSell` double DEFAULT NULL,
+  `OIContractSingleOptBuy` double DEFAULT NULL,
+  `OIContractCompOptSell` double DEFAULT NULL,
+  `OIContractCompOptBuy` double DEFAULT NULL,
+  `OIContractForward` double DEFAULT NULL,
+  `OIContractSwap` double DEFAULT NULL,
+  `OIContractFair` double DEFAULT NULL,
+  `OIContractOther` double DEFAULT NULL,
+  `OIFairFut` double DEFAULT NULL,
+  `OIFairSingleOptSell` double DEFAULT NULL,
+  `OIFairSingleOptBuy` double DEFAULT NULL,
+  `OIFairCompOptSell` double DEFAULT NULL,
+  `OIFairCompOptBuy` double DEFAULT NULL,
+  `OIFairForward` double DEFAULT NULL,
+  `OIFairSwap` double DEFAULT NULL,
+  `OIFairValue` double DEFAULT NULL,
+  `OIFairOther` double DEFAULT NULL,
+  `OIIncomeFut` double DEFAULT NULL,
+  `OIIncomeSingleOptSell` double DEFAULT NULL,
+  `OIIncomeSingleOptBuy` double DEFAULT NULL,
+  `OIIncomeCompOptSell` double DEFAULT NULL,
+  `OIIncomeCompOptBuy` double DEFAULT NULL,
+  `OIIncomeForward` double DEFAULT NULL,
+  `OIIncomeSwap` double DEFAULT NULL,
+  `OIIncomeFair` double DEFAULT NULL,
+  `OIIncomeOther` double DEFAULT NULL,
+  `OffsetContractFut` double DEFAULT NULL,
+  `OffsetContractSingleOptSell` double DEFAULT NULL,
+  `OffsetContractSingleOptBuy` double DEFAULT NULL,
+  `OffsetContractCompOptSell` double DEFAULT NULL,
+  `OffsetContractCompOptBuy` double DEFAULT NULL,
+  `OffsetContractForward` double DEFAULT NULL,
+  `OffsetContractSwap` double DEFAULT NULL,
+  `OffsetContractFair` double DEFAULT NULL,
+  `OffsetContractOther` double DEFAULT NULL,
+  `OffsetIncomeFut` double DEFAULT NULL,
+  `OffsetIncomeSingleOptSell` double DEFAULT NULL,
+  `OffsetIncomeSingleOptBuy` double DEFAULT NULL,
+  `OffsetIncomeCompOptSell` double DEFAULT NULL,
+  `OffsetIncomeCompOptBuy` double DEFAULT NULL,
+  `OffsetIncomeForward` double DEFAULT NULL,
+  `OffsetIncomeSwap` double DEFAULT NULL,
+  `OffsetIncomeFair` double DEFAULT NULL,
+  `OffsetIncomeOther` double DEFAULT NULL,
+  `NoteFut` text,
+  `NoteSingleOptSell` text,
+  `NoteSingleOptBuy` text,
+  `NoteCompOptSell` text,
+  `NoteCompOptBuy` text,
+  `NoteForward` text,
+  `NoteSwap` text,
+  `NoteFair` text,
+  `NoteOther` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `DerivativeFair_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Dividend`
+--
+
+DROP TABLE IF EXISTS `Dividend`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Dividend` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` text,
+  `StockName` text,
+  `ShareholderMeetYear` bigint(20) DEFAULT NULL,
+  `DivStatus` text,
+  `Period` text,
+  `DivDistrDate` date DEFAULT NULL,
+  `ShareholderMeetDate` date DEFAULT NULL,
+  `BeginRetainEarn` double DEFAULT NULL,
+  `NetProfit` double DEFAULT NULL,
+  `DistrNetProfit` double DEFAULT NULL,
+  `UnappropriatedRetainEarn` double DEFAULT NULL,
+  `CashDiv` double DEFAULT NULL,
+  `StkDiv` double DEFAULT NULL,
+  `CashDiv_Earn` double DEFAULT NULL,
+  `Cash_LegalReserve_CapSurplus` double DEFAULT NULL,
+  `TotalCashDivAmt` double DEFAULT NULL,
+  `StkDiv_CapInc_Earn` double DEFAULT NULL,
+  `StkDiv_LegalReserve_CapSurplus` double DEFAULT NULL,
+  `TotalStkDivShare` bigint(20) DEFAULT NULL,
+  `Reward_DirSup` double DEFAULT NULL,
+  `Emp_CashBouns` double DEFAULT NULL,
+  `Emp_StkBouns` double DEFAULT NULL,
+  `Emp_StkBounsShare` bigint(20) DEFAULT NULL,
+  `Emp_CashBonus_CapSurplus_pct` double DEFAULT NULL,
+  `BounsToEmpOnly` tinyint(1) DEFAULT NULL,
+  `Diff_BoardMeet_Shareholder` text,
+  `DivDistrSum` text,
+  `Note` text,
+  `BVPS` text,
+  `Market` varchar(128) NOT NULL,
+  PRIMARY KEY (`Date`,`Market`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `EGDetail`
+--
+
+DROP TABLE IF EXISTS `EGDetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `EGDetail` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Serial` text,
+  `Guarantee` text,
+  `Endorsee` text,
+  `EndorseeRelation` text,
+  `IndividualEGLimit` double DEFAULT NULL,
+  `AcEGBal` double DEFAULT NULL,
+  `SubsMEGAmtChg` double DEFAULT NULL,
+  `EGEndingBalance` double DEFAULT NULL,
+  `ActualEGAmt` double DEFAULT NULL,
+  `PropEGAmt` double DEFAULT NULL,
+  `AccEGAmtToNAV` double DEFAULT NULL,
+  `EGLimit` double DEFAULT NULL,
+  `ToSubsEG` tinyint(1) DEFAULT NULL,
+  `ToParentEG` tinyint(1) DEFAULT NULL,
+  `ToChinaEG` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `EGDetail_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `EPS`
+--
+
+DROP TABLE IF EXISTS `EPS`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `EPS` (
+  `Market` text,
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Industry` text,
+  `BasicEPS` double DEFAULT NULL,
+  `BVPS` text,
+  `Revenue` double DEFAULT NULL,
+  `OpIncome` double DEFAULT NULL,
+  `NonOpIncomeExpenses` double DEFAULT NULL,
+  `NetProfit` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ETFs`
+--
+
+DROP TABLE IF EXISTS `ETFs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ETFs` (
+  `Date` date DEFAULT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `ProdType` text,
+  `Sect` text,
+  `PubDate` date DEFAULT NULL,
+  `IsinCode` text,
+  `CFICode` text,
+  `FundName` text,
+  `TrackIndex` text,
+  `Telephone` text,
+  `FundType` text,
+  `FundEName` text,
+  `Address` text,
+  `Chairman` text,
+  `Spokesman` text,
+  `GM` text,
+  `SpokesmanAgent` text,
+  `PortfolioManager` text,
+  `EIN` text,
+  `GeneralAgent` text,
+  `EstablishDate` date DEFAULT NULL,
+  `FundSize` double DEFAULT NULL,
+  `IssueShares` bigint(20) DEFAULT NULL,
+  `FundXferAgency` text,
+  `FundXferAgencyTel` text,
+  `FundXferAgencyAddr` text,
+  `EtfHasFgnStk` tinyint(1) DEFAULT NULL,
+  `AliasList` text,
+  PRIMARY KEY (`Symbol`),
+  KEY `ETFs_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `EquityChg`
+--
+
+DROP TABLE IF EXISTS `EquityChg`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `EquityChg` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `NormalShareCap` double DEFAULT NULL,
+  `CapSurplus` double DEFAULT NULL,
+  `LegalReserve` double DEFAULT NULL,
+  `UnapprRetainedEarnings` double DEFAULT NULL,
+  `CumulativeTransAdjustments` double DEFAULT NULL,
+  `NetLossNotRecogAsPensionCost` double DEFAULT NULL,
+  `UnrealGainLossFinancialInstruments` double DEFAULT NULL,
+  `UnrealRevaluationGain` double DEFAULT NULL,
+  `TotalEquity` double DEFAULT NULL,
+  `StockDividendToBeDistributed` double DEFAULT NULL,
+  `SpecialReserve` double DEFAULT NULL,
+  `PreferredStock` double DEFAULT NULL,
+  `CertOfBondStockConv` double DEFAULT NULL,
+  `AdvReceiptsCommonStock` double DEFAULT NULL,
+  `CapOther` text,
+  `TreasuryStk` double DEFAULT NULL,
+  `EquityRelatedAssetForSale` double DEFAULT NULL,
+  `TotalOtherEquity` double DEFAULT NULL,
+  `Equity_PreInvestor` double DEFAULT NULL,
+  `RetainEarn` double DEFAULT NULL,
+  `EquityNotUnderCCBeforeComb` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `EquityChg_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FInfo`
+--
+
+DROP TABLE IF EXISTS `FInfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FInfo` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `CurrAndNonFAssets` double DEFAULT NULL,
+  `CurrAndNonFAssetsRatio` double DEFAULT NULL,
+  `ToParentCurrAndNonFAssetsRatio` double DEFAULT NULL,
+  `WorkingCapital` double DEFAULT NULL,
+  `StkPledge` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `FInfo_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FPos`
+--
+
+DROP TABLE IF EXISTS `FPos`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FPos` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `MopsFinanceAmount` double DEFAULT NULL,
+  `MopsFinancePercent` double DEFAULT NULL,
+  `MopsFinancePrevAmount` double DEFAULT NULL,
+  `MopsFinancePrevPercent` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `FPos_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FPosSum`
+--
+
+DROP TABLE IF EXISTS `FPosSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FPosSum` (
+  `Market` text,
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `AccountPayable` double DEFAULT NULL,
+  `AccruedPensionLiab` double DEFAULT NULL,
+  `AssetHeldForSale` double DEFAULT NULL,
+  `BondPayable` double DEFAULT NULL,
+  `CapSurplus` double DEFAULT NULL,
+  `Cash_CashEquiv` double DEFAULT NULL,
+  `ClientPositionCredit` double DEFAULT NULL,
+  `ClientPositionDebit` double DEFAULT NULL,
+  `CurrentAsset` double DEFAULT NULL,
+  `CurrentLiab` double DEFAULT NULL,
+  `DepositFromCBC_Banks` double DEFAULT NULL,
+  `Deposit_Remittance` double DEFAULT NULL,
+  `DueCentralBankAndLoanBanks` double DEFAULT NULL,
+  `DueToCBC_Banks` double DEFAULT NULL,
+  `EquityNotUnderCCBeforeComb` double DEFAULT NULL,
+  `Equity_PreInvestor` double DEFAULT NULL,
+  `EquivIssueShare_CommonStk` bigint(20) DEFAULT NULL,
+  `FLiab_FairValue` double DEFAULT NULL,
+  `FinanceLiab` double DEFAULT NULL,
+  `FixAsset` double DEFAULT NULL,
+  `Fund_Invest` double DEFAULT NULL,
+  `IntangibleAsset` double DEFAULT NULL,
+  `InterDepartmentAccountCredit` double DEFAULT NULL,
+  `InterDepartmentAccountDebit` double DEFAULT NULL,
+  `Investment` double DEFAULT NULL,
+  `Liab_HeldForSale` double DEFAULT NULL,
+  `LongTermLiab` double DEFAULT NULL,
+  `MinorStockholderInterest` double DEFAULT NULL,
+  `NAVPS` double DEFAULT NULL,
+  `NetAccountReceivable` double DEFAULT NULL,
+  `NetDiscountedNote_Loan` double DEFAULT NULL,
+  `NetEquityInvest_EquityMethod` double DEFAULT NULL,
+  `NetFAsset_AFS` double DEFAULT NULL,
+  `NetFAsset_FairValue` double DEFAULT NULL,
+  `NetFAsset_HeldToMaturity` double DEFAULT NULL,
+  `NetNotePayable` double DEFAULT NULL,
+  `NetOtherFAsset` double DEFAULT NULL,
+  `NetPropertyInvest` double DEFAULT NULL,
+  `NetReinsuReserveAsset` double DEFAULT NULL,
+  `Note_BondRP` double DEFAULT NULL,
+  `Note_BondRS` double DEFAULT NULL,
+  `Op_LiabReserve` double DEFAULT NULL,
+  `OtherAsset` double DEFAULT NULL,
+  `OtherBorrowing` double DEFAULT NULL,
+  `OtherFLiab` double DEFAULT NULL,
+  `OtherLiab` double DEFAULT NULL,
+  `PrefStkLiab` double DEFAULT NULL,
+  `Provision` double DEFAULT NULL,
+  `Reserves` double DEFAULT NULL,
+  `RetainedEarning` double DEFAULT NULL,
+  `SepaAccountInsuLiab` double DEFAULT NULL,
+  `SepaAccountProdAsset` double DEFAULT NULL,
+  `ShareCap` double DEFAULT NULL,
+  `ShareInEntityByEntityAndSub` double DEFAULT NULL,
+  `TotalAsset` double DEFAULT NULL,
+  `TotalEquity` double DEFAULT NULL,
+  `TotalLiab` double DEFAULT NULL,
+  `TotalOtherEquity` double DEFAULT NULL,
+  `TreasuryStk` double DEFAULT NULL,
+  `BuyExchangeDiscountedNote_Loan` double DEFAULT NULL,
+  `BoughtBillsSecurities` double DEFAULT NULL,
+  `LongInvestment` double DEFAULT NULL,
+  `LongTermPayInterestLiab` double DEFAULT NULL,
+  `Loan` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `FPosSum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FStat`
+--
+
+DROP TABLE IF EXISTS `FStat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FStat` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `DebtRatio` double DEFAULT NULL,
+  `LongFundToFixAsset` double DEFAULT NULL,
+  `CurrentRatio` double DEFAULT NULL,
+  `QuickRatio` double DEFAULT NULL,
+  `TimesInterestEarned` double DEFAULT NULL,
+  `ReceivablesTurnoverRatio` double DEFAULT NULL,
+  `AvgCollectionDays` double DEFAULT NULL,
+  `AvgInventoryTurnover` double DEFAULT NULL,
+  `AvgInventoryTurnoverDays` double DEFAULT NULL,
+  `FixedAssetsTurnover` double DEFAULT NULL,
+  `TotalAssetsTurnover` double DEFAULT NULL,
+  `ROA` double DEFAULT NULL,
+  `ROE` double DEFAULT NULL,
+  `OpIncomeToCap` double DEFAULT NULL,
+  `PretaxIncomeToCap` double DEFAULT NULL,
+  `ProfitMargin` double DEFAULT NULL,
+  `EPS` double DEFAULT NULL,
+  `CashFlowRatio` double DEFAULT NULL,
+  `CashFlowAdequacyRatio` double DEFAULT NULL,
+  `CashReinvestmentRatio` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `FStat_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FallCanSell`
+--
+
+DROP TABLE IF EXISTS `FallCanSell`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FallCanSell` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `FallCanSellForbid` tinyint(1) DEFAULT NULL,
+  `SuspSBLSell` tinyint(1) DEFAULT NULL,
+  `SuspCreditSell` tinyint(1) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `FallCanSell_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Funds`
+--
+
+DROP TABLE IF EXISTS `Funds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Funds` (
+  `Date` date NOT NULL,
+  `Code` text,
+  `Fund` varchar(128) NOT NULL,
+  `FundName` text,
+  `Currency` text,
+  `FundSize` double DEFAULT NULL,
+  `FundSizeCurrency` double DEFAULT NULL,
+  `FundMarketShare` double DEFAULT NULL,
+  `NAVPS` double DEFAULT NULL,
+  `NAVPSCurrency` double DEFAULT NULL,
+  `UnitBenefit` double DEFAULT NULL,
+  `NPBenefit` bigint(20) DEFAULT NULL,
+  `IIBenefit` bigint(20) DEFAULT NULL,
+  `TotalBenifit` bigint(20) DEFAULT NULL,
+  `SubscrAmt` double DEFAULT NULL,
+  `SubscrAmtCurrency` double DEFAULT NULL,
+  `RedempAmt` double DEFAULT NULL,
+  `RedempAmtCurrency` double DEFAULT NULL,
+  `MthSipTx` double DEFAULT NULL,
+  `MthSipCount` double DEFAULT NULL,
+  `MthSipAmtTwd` double DEFAULT NULL,
+  `MthSipAmtCurrency` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Fund`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Fut`
+--
+
+DROP TABLE IF EXISTS `Fut`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Fut` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Settle` varchar(128) NOT NULL,
+  `Open` double DEFAULT NULL,
+  `High` double DEFAULT NULL,
+  `Low` double DEFAULT NULL,
+  `Close` double DEFAULT NULL,
+  `PriceChg` double DEFAULT NULL,
+  `PriceChgPcent` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `SettlePrice` double DEFAULT NULL,
+  `OIVol` bigint(20) DEFAULT NULL,
+  `BestBid` double DEFAULT NULL,
+  `BestAsk` double DEFAULT NULL,
+  `HistHigh` double DEFAULT NULL,
+  `HistLow` double DEFAULT NULL,
+  `SuspForMsg` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FutExe`
+--
+
+DROP TABLE IF EXISTS `FutExe`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FutExe` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Settle` varchar(128) NOT NULL,
+  `LongVol` bigint(20) DEFAULT NULL,
+  `ShortVol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`),
+  KEY `FutExe_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FutMajOI`
+--
+
+DROP TABLE IF EXISTS `FutMajOI`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FutMajOI` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Settle` varchar(128) NOT NULL,
+  `TraderType` varchar(128) NOT NULL,
+  `OITop5BuyVol` bigint(20) DEFAULT NULL,
+  `OITop5SellVol` bigint(20) DEFAULT NULL,
+  `OITop10BuyVol` bigint(20) DEFAULT NULL,
+  `OITop10SellVol` bigint(20) DEFAULT NULL,
+  `OIVol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`,`TraderType`),
+  KEY `FutMajOI_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FutSprdTick`
+--
+
+DROP TABLE IF EXISTS `FutSprdTick`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FutSprdTick` (
+  `Date` date NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `NumSeq` bigint(20) NOT NULL,
+  `Time` text,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `NearMthPrice` double DEFAULT NULL,
+  `DeferMthPrice` double DEFAULT NULL,
+  `SprdTrade` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `FutTick`
+--
+
+DROP TABLE IF EXISTS `FutTick`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `FutTick` (
+  `Date` date NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `NumSeq` bigint(20) NOT NULL,
+  `Time` text,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `NearMthPrice` double DEFAULT NULL,
+  `DeferMthPrice` double DEFAULT NULL,
+  `CallAuction` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3CallPut`
+--
+
+DROP TABLE IF EXISTS `II3CallPut`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3CallPut` (
+  `Date` date NOT NULL,
+  `Institute` varchar(128) NOT NULL,
+  `StockName` varchar(128) NOT NULL,
+  `Option` varchar(128) NOT NULL,
+  `BuyVol` bigint(20) DEFAULT NULL,
+  `BuyAmt` double DEFAULT NULL,
+  `SellVol` bigint(20) DEFAULT NULL,
+  `SellAmt` double DEFAULT NULL,
+  `NetBuyVol` bigint(20) DEFAULT NULL,
+  `NetBuyAmt` double DEFAULT NULL,
+  `OIBuyVol` bigint(20) DEFAULT NULL,
+  `OIBuyAmt` double DEFAULT NULL,
+  `OISellVol` bigint(20) DEFAULT NULL,
+  `OISellAmt` double DEFAULT NULL,
+  `OINetBuyVol` bigint(20) DEFAULT NULL,
+  `OINetBuyAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Institute`,`StockName`,`Option`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3Fut`
+--
+
+DROP TABLE IF EXISTS `II3Fut`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3Fut` (
+  `Date` date NOT NULL,
+  `Institute` varchar(128) NOT NULL,
+  `StockName` varchar(128) NOT NULL,
+  `LongVol` bigint(20) DEFAULT NULL,
+  `LongAmt` double DEFAULT NULL,
+  `OILongVol` bigint(20) DEFAULT NULL,
+  `OILongAmt` double DEFAULT NULL,
+  `ShortVol` bigint(20) DEFAULT NULL,
+  `ShortAmt` double DEFAULT NULL,
+  `OIShortVol` bigint(20) DEFAULT NULL,
+  `OIShortAmt` double DEFAULT NULL,
+  `NetLongVol` bigint(20) DEFAULT NULL,
+  `NetLongAmt` double DEFAULT NULL,
+  `OINetLongVol` bigint(20) DEFAULT NULL,
+  `OINetLongAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Institute`,`StockName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3FutOpt`
+--
+
+DROP TABLE IF EXISTS `II3FutOpt`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3FutOpt` (
+  `Date` date NOT NULL,
+  `Institute` varchar(128) NOT NULL,
+  `Investing` varchar(128) NOT NULL,
+  `LongVol` bigint(20) DEFAULT NULL,
+  `LongAmt` double DEFAULT NULL,
+  `OILongVol` bigint(20) DEFAULT NULL,
+  `OILongAmt` double DEFAULT NULL,
+  `ShortVol` bigint(20) DEFAULT NULL,
+  `ShortAmt` double DEFAULT NULL,
+  `OIShortVol` bigint(20) DEFAULT NULL,
+  `OIShortAmt` double DEFAULT NULL,
+  `NetLongVol` bigint(20) DEFAULT NULL,
+  `NetLongAmt` double DEFAULT NULL,
+  `OINetLongVol` bigint(20) DEFAULT NULL,
+  `OINetLongAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Institute`,`Investing`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3Hold`
+--
+
+DROP TABLE IF EXISTS `II3Hold`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3Hold` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `IssueShares` bigint(20) DEFAULT NULL,
+  `ITrustHoldVol` bigint(20) DEFAULT NULL,
+  `DealerHoldVol` bigint(20) DEFAULT NULL,
+  `FIIHoldVol` bigint(20) DEFAULT NULL,
+  `FIIInvestUBoundRatio` double DEFAULT NULL,
+  `FIIInvestChinaUBoundRatio` double DEFAULT NULL,
+  `FIIDiffCmt` text,
+  `FIIHoldDeclareDay` date DEFAULT NULL,
+  `Market` text,
+  `FIIInvestRemain` bigint(20) DEFAULT NULL,
+  `FIIInvestRemainRatio` double DEFAULT NULL,
+  `FIIHoldRatio` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `II3Hold_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3Opt`
+--
+
+DROP TABLE IF EXISTS `II3Opt`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3Opt` (
+  `Date` date NOT NULL,
+  `Institute` varchar(128) NOT NULL,
+  `StockName` varchar(128) NOT NULL,
+  `LongVol` bigint(20) DEFAULT NULL,
+  `LongAmt` double DEFAULT NULL,
+  `OILongVol` bigint(20) DEFAULT NULL,
+  `OILongAmt` double DEFAULT NULL,
+  `ShortVol` bigint(20) DEFAULT NULL,
+  `ShortAmt` double DEFAULT NULL,
+  `OIShortVol` bigint(20) DEFAULT NULL,
+  `OIShortAmt` double DEFAULT NULL,
+  `NetLongVol` bigint(20) DEFAULT NULL,
+  `NetLongAmt` double DEFAULT NULL,
+  `OINetLongVol` bigint(20) DEFAULT NULL,
+  `OINetLongAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Institute`,`StockName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3Sum`
+--
+
+DROP TABLE IF EXISTS `II3Sum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3Sum` (
+  `Date` date NOT NULL,
+  `Market` varchar(128) NOT NULL,
+  `FIINetBuyAmt` double DEFAULT NULL,
+  `FIIBuyAmt` double DEFAULT NULL,
+  `FIISellAmt` double DEFAULT NULL,
+  `ITrustNetBuyAmt` double DEFAULT NULL,
+  `ITrustBuyAmt` double DEFAULT NULL,
+  `ITrustSellAmt` double DEFAULT NULL,
+  `DealerBuyAmt` double DEFAULT NULL,
+  `DealerSellAmt` double DEFAULT NULL,
+  `DealerNetBuyAmt` double DEFAULT NULL,
+  `DealerTradeBuyAmt` double DEFAULT NULL,
+  `DealerTradeSellAmt` double DEFAULT NULL,
+  `DealerTradeNetBuyAmt` double DEFAULT NULL,
+  `DealerHedgeBuyAmt` double DEFAULT NULL,
+  `DealerHedgeSellAmt` double DEFAULT NULL,
+  `DealerHedgeNetBuyAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Market`),
+  KEY `II3Sum_Market_Date` (`Market`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `II3Trade`
+--
+
+DROP TABLE IF EXISTS `II3Trade`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `II3Trade` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Market` text,
+  `FIINetBuyVol` bigint(20) DEFAULT NULL,
+  `FIIBuyVol` bigint(20) DEFAULT NULL,
+  `FIISellVol` bigint(20) DEFAULT NULL,
+  `ITrustNetBuyVol` bigint(20) DEFAULT NULL,
+  `ITrustBuyVol` bigint(20) DEFAULT NULL,
+  `ITrustSellVol` bigint(20) DEFAULT NULL,
+  `DealerNetBuyVol` bigint(20) DEFAULT NULL,
+  `DealerBuyVol` bigint(20) DEFAULT NULL,
+  `DealerSellVol` bigint(20) DEFAULT NULL,
+  `DealerTradeNetBuyVol` bigint(20) DEFAULT NULL,
+  `DealerTradeBuyVol` bigint(20) DEFAULT NULL,
+  `DealerTradeSellVol` bigint(20) DEFAULT NULL,
+  `DealerHedgeNetBuyVol` bigint(20) DEFAULT NULL,
+  `DealerHedgeBuyVol` bigint(20) DEFAULT NULL,
+  `DealerHedgeSellVol` bigint(20) DEFAULT NULL,
+  `ProdType` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `II3Trade_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ITrustShare`
+--
+
+DROP TABLE IF EXISTS `ITrustShare`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ITrustShare` (
+  `Date` date NOT NULL,
+  `Fund` varchar(128) NOT NULL,
+  `FundName` text,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `FundSize` double DEFAULT NULL,
+  `HoldAmt` double DEFAULT NULL,
+  `HoldRatio` double DEFAULT NULL,
+  `HoldVol` bigint(20) DEFAULT NULL,
+  `Close` double DEFAULT NULL,
+  `CloseDate` date DEFAULT NULL,
+  `FundSrc` text,
+  PRIMARY KEY (`Date`,`Fund`,`Symbol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `IfrsFPosSum`
+--
+
+DROP TABLE IF EXISTS `IfrsFPosSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `IfrsFPosSum` (
+  `Market` text,
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `AccountPayable` double DEFAULT NULL,
+  `BondPayable` double DEFAULT NULL,
+  `BondCorpPayable` double DEFAULT NULL,
+  `CapSurplus` double DEFAULT NULL,
+  `Cash_CashEquiv` double DEFAULT NULL,
+  `CurIncomeTaxAsset` double DEFAULT NULL,
+  `CurIncomeTaxLiab` double DEFAULT NULL,
+  `CurrentAsset` double DEFAULT NULL,
+  `CurrentLiab` double DEFAULT NULL,
+  `DeferIncomeTaxAsset` double DEFAULT NULL,
+  `DeferIncomeTaxLiab` double DEFAULT NULL,
+  `DepositFromCBC_Banks` double DEFAULT NULL,
+  `Deposit_Remittance` double DEFAULT NULL,
+  `DueCentralBankAndLoanBanks` double DEFAULT NULL,
+  `DepositWithCBC_Banks` double DEFAULT NULL,
+  `DueToCBC_Banks` double DEFAULT NULL,
+  `EquityAttrOwnerParent` double DEFAULT NULL,
+  `EquityNotUnderCCBeforeComb` double DEFAULT NULL,
+  `Equity_PreInvestor` double DEFAULT NULL,
+  `EquivIssueShare_CommonStk` bigint(20) DEFAULT NULL,
+  `FinAssetFairValueViaProfitLoss` double DEFAULT NULL,
+  `FinLiabAtCost` double DEFAULT NULL,
+  `FinLiabFairValueViaProfitLoss` double DEFAULT NULL,
+  `FinLiabPayable` double DEFAULT NULL,
+  `HedgingDerivativeFinAsset` double DEFAULT NULL,
+  `HedgingDerivativeFinLiab` double DEFAULT NULL,
+  `InsuranceLiab` double DEFAULT NULL,
+  `Investment` double DEFAULT NULL,
+  `Liab_HeldForSale` double DEFAULT NULL,
+  `NetAccountReceivable` double DEFAULT NULL,
+  `NetAssetHeldForSale` double DEFAULT NULL,
+  `NetDiscountedNote_Loan` double DEFAULT NULL,
+  `NetEquityMethodAccountInvest` double DEFAULT NULL,
+  `NetFAsset_AFS` double DEFAULT NULL,
+  `NetHeldMaturityFinAsset` double DEFAULT NULL,
+  `NetIntangibleAsset` double DEFAULT NULL,
+  `NetInvestProperty` double DEFAULT NULL,
+  `NetNotePayable` double DEFAULT NULL,
+  `NetOtherAsset` double DEFAULT NULL,
+  `NetOtherFAsset` double DEFAULT NULL,
+  `NetPropertyEquipment` double DEFAULT NULL,
+  `NetReinsuranceContrAsset` double DEFAULT NULL,
+  `NetRestrictAsset` double DEFAULT NULL,
+  `NonControlInterest` double DEFAULT NULL,
+  `NonCurrentAsset` double DEFAULT NULL,
+  `NonCurrentLiab` double DEFAULT NULL,
+  `Note_BondRP` double DEFAULT NULL,
+  `Note_BondRS` double DEFAULT NULL,
+  `OtherBorrowing` double DEFAULT NULL,
+  `OtherEquity` double DEFAULT NULL,
+  `OtherFLiab` double DEFAULT NULL,
+  `OtherLiab` double DEFAULT NULL,
+  `PrefStkLiab` double DEFAULT NULL,
+  `ProvReservInsuranceContrWithNFP` double DEFAULT NULL,
+  `Provision` double DEFAULT NULL,
+  `RefBookValuePerShare` double DEFAULT NULL,
+  `ReservExchDiffTranslation` double DEFAULT NULL,
+  `RetainedEarning` double DEFAULT NULL,
+  `SepaAccountInsuLiab` double DEFAULT NULL,
+  `SepaAccountProdAsset` double DEFAULT NULL,
+  `ShareCap` double DEFAULT NULL,
+  `ShareInEntityByEntityAndSub` double DEFAULT NULL,
+  `ShortTermLiab` double DEFAULT NULL,
+  `TotalAsset` double DEFAULT NULL,
+  `TotalEquity` double DEFAULT NULL,
+  `TotalLiab` double DEFAULT NULL,
+  `TreasuryStk` double DEFAULT NULL,
+  `WaitWriteDownShare` double DEFAULT NULL,
+  `TotalEquityAndLiab` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `IfrsIncomeSum`
+--
+
+DROP TABLE IF EXISTS `IfrsIncomeSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `IfrsIncomeSum` (
+  `Market` text,
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `EPS` double DEFAULT NULL,
+  `Cost` double DEFAULT NULL,
+  `CsIncome` double DEFAULT NULL,
+  `CsIncomeAttrNonControlInterests` double DEFAULT NULL,
+  `CsIncomeAttrParentOwners` double DEFAULT NULL,
+  `CsIncomeAttrPrecedInvUnderCC` double DEFAULT NULL,
+  `DoubtfulDebtsExpense` double DEFAULT NULL,
+  `EarningsBInterest` double DEFAULT NULL,
+  `Expense` double DEFAULT NULL,
+  `GrossProfit` double DEFAULT NULL,
+  `NetChangeInsuranceLiabProv` double DEFAULT NULL,
+  `NetCsIncomeNotUnderCCBeforeComb` double DEFAULT NULL,
+  `NetInterestIncome` double DEFAULT NULL,
+  `NetOpRevenue` double DEFAULT NULL,
+  `NetOtherCsIncomeATax` double DEFAULT NULL,
+  `NetOtherExpenses` double DEFAULT NULL,
+  `NetProfit` double DEFAULT NULL,
+  `NonOpIncomeExpenses` double DEFAULT NULL,
+  `OpCostExpense` double DEFAULT NULL,
+  `OpIncome` double DEFAULT NULL,
+  `OpRevGains` double DEFAULT NULL,
+  `ProfitAttrNonControlInterests` double DEFAULT NULL,
+  `ProfitAttrParentOwners` double DEFAULT NULL,
+  `ProfitBTax` double DEFAULT NULL,
+  `ProfitContOpATax` double DEFAULT NULL,
+  `ProfitContOpBTax` double DEFAULT NULL,
+  `ProfitDiscontOp` double DEFAULT NULL,
+  `ProfitNotUnderCCBeforeComb` double DEFAULT NULL,
+  `ProfitPrecedInvUnderCC` double DEFAULT NULL,
+  `RealizedSalesProfit` double DEFAULT NULL,
+  `TaxExpense` double DEFAULT NULL,
+  `Revenue` double DEFAULT NULL,
+  `UnrealSalesProfit` double DEFAULT NULL,
+  `Revenue_mim` double DEFAULT NULL,
+  `Expense_mim` double DEFAULT NULL,
+  `Revenue_bd` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Income`
+--
+
+DROP TABLE IF EXISTS `Income`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Income` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `AccountingYear` text,
+  `MopsFinanceField` text,
+  `MopsFinanceAmount` double DEFAULT NULL,
+  `MopsFinancePercent` double DEFAULT NULL,
+  `MopsFinancePrevAmount` double DEFAULT NULL,
+  `MopsFinancePrevPercent` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `Income_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `IncomeSum`
+--
+
+DROP TABLE IF EXISTS `IncomeSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `IncomeSum` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `BasicEPS` double DEFAULT NULL,
+  `Cost` double DEFAULT NULL,
+  `CsTotalIncomMinor` double DEFAULT NULL,
+  `CsTotalIncomParent` double DEFAULT NULL,
+  `CsTotalIncome` double DEFAULT NULL,
+  `CumuChangeAccounting` double DEFAULT NULL,
+  `EPS` double DEFAULT NULL,
+  `EarningsBInterest` double DEFAULT NULL,
+  `Expense` double DEFAULT NULL,
+  `ExtraordinaryGainLoss` double DEFAULT NULL,
+  `NetInterestIncome` double DEFAULT NULL,
+  `NetOpRevenue` double DEFAULT NULL,
+  `NetProfit` double DEFAULT NULL,
+  `NetServiceFeeRev` double DEFAULT NULL,
+  `NonOpExpense` double DEFAULT NULL,
+  `NonOpProfit` double DEFAULT NULL,
+  `OpIncome` double DEFAULT NULL,
+  `OpRevGains` double DEFAULT NULL,
+  `ProfitContOpATax` double DEFAULT NULL,
+  `ProfitContOpBTax` double DEFAULT NULL,
+  `ProfitDiscontOp` double DEFAULT NULL,
+  `ProfitNotUnderCCBeforeComb` double DEFAULT NULL,
+  `ProvisionForInsu` double DEFAULT NULL,
+  `TaxExpense` double DEFAULT NULL,
+  `Revenue` double DEFAULT NULL,
+  `UncollectAccountExpense` double DEFAULT NULL,
+  `UnionRealProfit` double DEFAULT NULL,
+  `UnionUnrealProfit` double DEFAULT NULL,
+  `AdjustItem` double DEFAULT NULL,
+  `ProfitBTax` double DEFAULT NULL,
+  `NetOtherExpenses` double DEFAULT NULL,
+  `CsNetIncome` double DEFAULT NULL,
+  `MinorGain` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `IncomeSum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Indices`
+--
+
+DROP TABLE IF EXISTS `Indices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Indices` (
+  `Date` date NOT NULL,
+  `Market` varchar(128) NOT NULL,
+  `IdxName` varchar(128) NOT NULL,
+  `Close` double DEFAULT NULL,
+  `Open` double DEFAULT NULL,
+  `High` double DEFAULT NULL,
+  `Low` double DEFAULT NULL,
+  `PriceChg` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Market`,`IdxName`),
+  KEY `Indices_Market_Date` (`Market`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LendDetail`
+--
+
+DROP TABLE IF EXISTS `LendDetail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LendDetail` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Serial` text,
+  `Credit` text,
+  `Debit` text,
+  `IsRelatedParty` tinyint(1) DEFAULT NULL,
+  `AccountWithDebit` text,
+  `AcLendCapBal` double DEFAULT NULL,
+  `SubsMAmtOfBusiness` double DEFAULT NULL,
+  `SubsMFinancialIntermediaries` double DEFAULT NULL,
+  `EndingBalance` double DEFAULT NULL,
+  `ActualLendAmt` double DEFAULT NULL,
+  `RateRange` text,
+  `LendCapType` text,
+  `AmtOfBusiness` double DEFAULT NULL,
+  `FinancialIntermediariesReason` text,
+  `AllowanceDoubtAccount` double DEFAULT NULL,
+  `CollateralName` text,
+  `CollateralValue` double DEFAULT NULL,
+  `IndividualLendCapLimit` double DEFAULT NULL,
+  `TotalLendCapLimit` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `LendDetail_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LendEG`
+--
+
+DROP TABLE IF EXISTS `LendEG`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LendEG` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `MLendCap` double DEFAULT NULL,
+  `PreMLendCap` double DEFAULT NULL,
+  `LendCapLimit` double DEFAULT NULL,
+  `SubsMLendCap` double DEFAULT NULL,
+  `SubsPreMLendCap` double DEFAULT NULL,
+  `SubsLendCapLimit` double DEFAULT NULL,
+  `MEGChg` double DEFAULT NULL,
+  `AcEGBal` double DEFAULT NULL,
+  `EGLimit` double DEFAULT NULL,
+  `SubsMEGAmtChg` double DEFAULT NULL,
+  `SubsAcEGBal` double DEFAULT NULL,
+  `SubsEGLimit` double DEFAULT NULL,
+  `ChinaMEGChg` double DEFAULT NULL,
+  `ChinaAcEGBal` double DEFAULT NULL,
+  `SubsChinaMEGChg` double DEFAULT NULL,
+  `SubsChinaAcEGBal` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `LendEG_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `LicenseChange`
+--
+
+DROP TABLE IF EXISTS `LicenseChange`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `LicenseChange` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `IPO_Declare` tinyint(1) DEFAULT NULL,
+  `BVPS` text,
+  `CapShare` bigint(20) DEFAULT NULL,
+  `CapAmt` double DEFAULT NULL,
+  `ContributeCapShare` bigint(20) DEFAULT NULL,
+  `ContributeCapAmt` double DEFAULT NULL,
+  `CapFunding` double DEFAULT NULL,
+  `CapIncByCash` double DEFAULT NULL,
+  `CapInc_PaidIn` double DEFAULT NULL,
+  `CapInc_RetainedEarn` double DEFAULT NULL,
+  `Date_SFB_PaidIn` date DEFAULT NULL,
+  `Date_SFB_RetainedEarn` date DEFAULT NULL,
+  `CapInc_Merge` double DEFAULT NULL,
+  `CapRedtn` double DEFAULT NULL,
+  `Date_SFB_CapInc_Merge` date DEFAULT NULL,
+  `Date_SFB_CapRedtn` date DEFAULT NULL,
+  `CapOther` text,
+  `CapXCash` text,
+  `Other` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `LicenseChange_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `MarketStat`
+--
+
+DROP TABLE IF EXISTS `MarketStat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MarketStat` (
+  `Date` date NOT NULL,
+  `Market` varchar(128) NOT NULL,
+  `Investing` varchar(128) NOT NULL,
+  `Txs` bigint(20) DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `Amount` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Market`,`Investing`),
+  KEY `MarketStat_Market_Date` (`Market`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `MarketSum`
+--
+
+DROP TABLE IF EXISTS `MarketSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MarketSum` (
+  `Date` date NOT NULL,
+  `Market` varchar(128) NOT NULL,
+  `Amount` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `Txs` bigint(20) DEFAULT NULL,
+  `LimitUpStks` bigint(20) DEFAULT NULL,
+  `LimitDownStks` bigint(20) DEFAULT NULL,
+  `RiseStks` bigint(20) DEFAULT NULL,
+  `FallStks` bigint(20) DEFAULT NULL,
+  `UnchStks` bigint(20) DEFAULT NULL,
+  `UnsettleStks` bigint(20) DEFAULT NULL,
+  `NoCompStks` bigint(20) DEFAULT NULL,
+  `StkLimitUpStks` bigint(20) DEFAULT NULL,
+  `StkLimitDownStks` bigint(20) DEFAULT NULL,
+  `StkRiseStks` bigint(20) DEFAULT NULL,
+  `StkFallStks` bigint(20) DEFAULT NULL,
+  `StkUnchStks` bigint(20) DEFAULT NULL,
+  `StkUnsettleStks` bigint(20) DEFAULT NULL,
+  `StkNoCompStks` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Market`),
+  KEY `MarketSum_Market_Date` (`Market`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `MgnLong`
+--
+
+DROP TABLE IF EXISTS `MgnLong`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MgnLong` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `MgnLongBalVol` bigint(20) DEFAULT NULL,
+  `MgnLongPreBalVol` bigint(20) DEFAULT NULL,
+  `MgnLongRepayVol` bigint(20) DEFAULT NULL,
+  `MgnLongBuyVol` bigint(20) DEFAULT NULL,
+  `MgnLongSellVol` bigint(20) DEFAULT NULL,
+  `MgnLongLimitVol` bigint(20) DEFAULT NULL,
+  `MgnOffsetVol` bigint(20) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `MgnLong_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `MgnShort`
+--
+
+DROP TABLE IF EXISTS `MgnShort`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MgnShort` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `MgnShortBalVol` bigint(20) DEFAULT NULL,
+  `MgnShortPreBalVol` bigint(20) DEFAULT NULL,
+  `MgnShortRepayVol` bigint(20) DEFAULT NULL,
+  `MgnShortBuyVol` bigint(20) DEFAULT NULL,
+  `MgnShortSellVol` bigint(20) DEFAULT NULL,
+  `MgnShortLimitVol` bigint(20) DEFAULT NULL,
+  `MgnShortSellAmt` double DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `MgnShort_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `MgnStat`
+--
+
+DROP TABLE IF EXISTS `MgnStat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `MgnStat` (
+  `Date` date NOT NULL,
+  `Market` varchar(128) NOT NULL,
+  `MgnLongBuyVol` bigint(20) DEFAULT NULL,
+  `MgnLongSellVol` bigint(20) DEFAULT NULL,
+  `MgnLongBalVol` bigint(20) DEFAULT NULL,
+  `MgnLongPreBalVol` bigint(20) DEFAULT NULL,
+  `MgnLongRepayVol` bigint(20) DEFAULT NULL,
+  `MgnShortBuyVol` bigint(20) DEFAULT NULL,
+  `MgnShortSellVol` bigint(20) DEFAULT NULL,
+  `MgnShortBalVol` bigint(20) DEFAULT NULL,
+  `MgnShortPreBalVol` bigint(20) DEFAULT NULL,
+  `MgnShortRepayVol` bigint(20) DEFAULT NULL,
+  `MgnLongBuyAmt` double DEFAULT NULL,
+  `MgnLongSellAmt` double DEFAULT NULL,
+  `MgnLongBalAmt` double DEFAULT NULL,
+  `MgnLongPreBalAmt` double DEFAULT NULL,
+  `MgnLongRepayAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Market`),
+  KEY `MgnStat_Market_Date` (`Market`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OddLot`
+--
+
+DROP TABLE IF EXISTS `OddLot`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OddLot` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `Txs` bigint(20) DEFAULT NULL,
+  `Amount` double DEFAULT NULL,
+  `BestBid` double DEFAULT NULL,
+  `BestBidVol` bigint(20) DEFAULT NULL,
+  `BestAsk` double DEFAULT NULL,
+  `BestAskVol` bigint(20) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `OddLot_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OpProfit`
+--
+
+DROP TABLE IF EXISTS `OpProfit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OpProfit` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `Revenue` double DEFAULT NULL,
+  `GrossMargin` double DEFAULT NULL,
+  `OpearatingMargin` double DEFAULT NULL,
+  `PretaxProfitMargin` double DEFAULT NULL,
+  `ProfitMargin` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `OpProfit_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Opt`
+--
+
+DROP TABLE IF EXISTS `Opt`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Opt` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Settle` varchar(128) NOT NULL,
+  `ExePrice` double NOT NULL,
+  `Option` varchar(128) NOT NULL,
+  `Open` double DEFAULT NULL,
+  `High` double DEFAULT NULL,
+  `Low` double DEFAULT NULL,
+  `Close` double DEFAULT NULL,
+  `SettlePrice` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `OIVol` bigint(20) DEFAULT NULL,
+  `BestBid` double DEFAULT NULL,
+  `BestAsk` double DEFAULT NULL,
+  `HistHigh` double DEFAULT NULL,
+  `HistLow` double DEFAULT NULL,
+  `SuspForMsg` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`,`ExePrice`,`Option`),
+  KEY `Opt_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OptDelta`
+--
+
+DROP TABLE IF EXISTS `OptDelta`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OptDelta` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Settle` varchar(128) NOT NULL,
+  `ExePrice` double NOT NULL,
+  `Option` varchar(128) NOT NULL,
+  `Delta` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`,`ExePrice`,`Option`),
+  KEY `OptDelta_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OptExe`
+--
+
+DROP TABLE IF EXISTS `OptExe`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OptExe` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Settle` varchar(128) NOT NULL,
+  `Option` varchar(128) NOT NULL,
+  `OIVol` bigint(20) DEFAULT NULL,
+  `OIItmVol` bigint(20) DEFAULT NULL,
+  `AbOIItmVol` bigint(20) DEFAULT NULL,
+  `ExeOIVol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`,`Option`),
+  KEY `OptExe_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OptMajOI`
+--
+
+DROP TABLE IF EXISTS `OptMajOI`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OptMajOI` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Settle` varchar(128) NOT NULL,
+  `Option` varchar(128) NOT NULL,
+  `TraderType` varchar(128) NOT NULL,
+  `OITop5BuyVol` bigint(20) DEFAULT NULL,
+  `OITop5SellVol` bigint(20) DEFAULT NULL,
+  `OITop10BuyVol` bigint(20) DEFAULT NULL,
+  `OITop10SellVol` bigint(20) DEFAULT NULL,
+  `OIVol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`,`Option`,`TraderType`),
+  KEY `OptMajOI_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OptTick`
+--
+
+DROP TABLE IF EXISTS `OptTick`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OptTick` (
+  `Date` date NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `ExePrice` double DEFAULT NULL,
+  `Option` text,
+  `NumSeq` bigint(20) NOT NULL,
+  `Time` text,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `CallAuction` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `OverseaSubInvest`
+--
+
+DROP TABLE IF EXISTS `OverseaSubInvest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `OverseaSubInvest` (
+  `Date` date NOT NULL,
+  `Market` text,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `InvestCorpName` text,
+  `OverseaSubName` text,
+  `AreaCode` text,
+  `ShareHold_pct` double DEFAULT NULL,
+  `InvestAmt` double DEFAULT NULL,
+  `InvestAmt_LastY` double DEFAULT NULL,
+  `RemainBal` double DEFAULT NULL,
+  `InvestProfit` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `OverseaSubInvest_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `PE`
+--
+
+DROP TABLE IF EXISTS `PE`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `PE` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `PER` double DEFAULT NULL,
+  `YTM` double DEFAULT NULL,
+  `PBR` double DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `PE_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ProdRevenue`
+--
+
+DROP TABLE IF EXISTS `ProdRevenue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ProdRevenue` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Item` text,
+  `ItemName` text,
+  `Amount` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `ProdRevenue_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Q`
+--
+
+DROP TABLE IF EXISTS `Q`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Q` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Close` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `Txs` bigint(20) DEFAULT NULL,
+  `Amount` double DEFAULT NULL,
+  `Open` double DEFAULT NULL,
+  `High` double DEFAULT NULL,
+  `Low` double DEFAULT NULL,
+  `PriceChg` double DEFAULT NULL,
+  `PriceRef` double DEFAULT NULL,
+  `BestBid` double DEFAULT NULL,
+  `BestAsk` double DEFAULT NULL,
+  `BestBidVol` bigint(20) DEFAULT NULL,
+  `BestAskVol` bigint(20) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `Symbol` (`Symbol`,`Date`) USING BTREE,
+  KEY `Quote_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Quote`
+--
+
+DROP TABLE IF EXISTS `Quote`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Quote` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `Close` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  `Txs` bigint(20) DEFAULT NULL,
+  `Amount` double DEFAULT NULL,
+  `Open` double DEFAULT NULL,
+  `High` double DEFAULT NULL,
+  `Low` double DEFAULT NULL,
+  `PriceChg` double DEFAULT NULL,
+  `PriceRef` double DEFAULT NULL,
+  `BestBid` double DEFAULT NULL,
+  `BestAsk` double DEFAULT NULL,
+  `BestBidVol` bigint(20) DEFAULT NULL,
+  `BestAskVol` bigint(20) DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `Symbol` (`Symbol`,`Date`) USING BTREE,
+  KEY `Quote_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RelationAssetsAcquired`
+--
+
+DROP TABLE IF EXISTS `RelationAssetsAcquired`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RelationAssetsAcquired` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Market` text,
+  `RelationName` text,
+  `AssetsAcquiredItem` text,
+  `MAssetsAcquired` double DEFAULT NULL,
+  `AcYAssetsAcquired` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `RelationAssetsAcquired_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RelationDisposalAssets`
+--
+
+DROP TABLE IF EXISTS `RelationDisposalAssets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RelationDisposalAssets` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Market` text,
+  `RelationName` text,
+  `DisposalAssetsItem` text,
+  `MDisposalAssetsBookValue` double DEFAULT NULL,
+  `MDisposalAssetsTrade` double DEFAULT NULL,
+  `AcYDisposalAssetsTrade` double DEFAULT NULL,
+  `MDisposalAssetsIncome` double DEFAULT NULL,
+  `AcYDisposalAssetsIncome` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `RelationDisposalAssets_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RelationPayable`
+--
+
+DROP TABLE IF EXISTS `RelationPayable`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RelationPayable` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Market` text,
+  `RelationName` text,
+  `MPayable` double DEFAULT NULL,
+  `AcYPayable` double DEFAULT NULL,
+  `AcYAccountToCsFStat` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `RelationPayable_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RelationPurchase`
+--
+
+DROP TABLE IF EXISTS `RelationPurchase`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RelationPurchase` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Market` text,
+  `RelationName` text,
+  `MPurchase` double DEFAULT NULL,
+  `MPurchaseToCsFStat` double DEFAULT NULL,
+  `AcYPurchase` double DEFAULT NULL,
+  `AcYPurchaseToCsFStat` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `RelationPurchase_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RelationReceivables`
+--
+
+DROP TABLE IF EXISTS `RelationReceivables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RelationReceivables` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Market` text,
+  `RelationName` text,
+  `MReceivables` double DEFAULT NULL,
+  `AcYReceivables` double DEFAULT NULL,
+  `AcYAccountToCsFStat` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `RelationReceivables_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `RelationSales`
+--
+
+DROP TABLE IF EXISTS `RelationSales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `RelationSales` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Market` text,
+  `RelationName` text,
+  `MSales` double DEFAULT NULL,
+  `MSalesToCsFStat` double DEFAULT NULL,
+  `AcYSales` double DEFAULT NULL,
+  `AcYSalesToCsFStat` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `RelationSales_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Revenue`
+--
+
+DROP TABLE IF EXISTS `Revenue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Revenue` (
+  `Date` date NOT NULL,
+  `Market` text,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Industry` text,
+  `MRevenue` double DEFAULT NULL,
+  `PreMRevenue` double DEFAULT NULL,
+  `PreYearMRevenue` double DEFAULT NULL,
+  `MOM_pct` double DEFAULT NULL,
+  `YOY_pct` double DEFAULT NULL,
+  `AcYRevenue` double DEFAULT NULL,
+  `PreAcYRevenue` double DEFAULT NULL,
+  `AcYOY_pct` double DEFAULT NULL,
+  `Note` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `Revenue_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SBLSell`
+--
+
+DROP TABLE IF EXISTS `SBLSell`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SBLSell` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `MgnSBL_BalVol` bigint(20) DEFAULT NULL,
+  `MgnSBL_PreBalVol` bigint(20) DEFAULT NULL,
+  `MgnSBL_RepayVol` bigint(20) DEFAULT NULL,
+  `MgnSBL_Vol` bigint(20) DEFAULT NULL,
+  `MgnSBL_AdjustVol` bigint(20) DEFAULT NULL,
+  `MgnSBL_LimitVol` bigint(20) DEFAULT NULL,
+  `MgnSBL_Amt` double DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `SBLSell_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ShareAdjust`
+--
+
+DROP TABLE IF EXISTS `ShareAdjust`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ShareAdjust` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `JobTitle` text,
+  `Name` text,
+  `ShareHoldType` text,
+  `ShareHold_Elected` bigint(20) DEFAULT NULL,
+  `PreMShare` bigint(20) DEFAULT NULL,
+  `PreMShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `PreMShare_AccPledge` bigint(20) DEFAULT NULL,
+  `PreMShare_AccPriv` bigint(20) DEFAULT NULL,
+  `MIncShare_Own_Market` bigint(20) DEFAULT NULL,
+  `MIncShare_Own_OtherNoPriv` bigint(20) DEFAULT NULL,
+  `MIncShare_Priv` bigint(20) DEFAULT NULL,
+  `MIncShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `MIncShare_Pledge` bigint(20) DEFAULT NULL,
+  `MDecShare_Own_Market` bigint(20) DEFAULT NULL,
+  `MDecShare_Own_OtherNoPriv` bigint(20) DEFAULT NULL,
+  `MDecShare_Priv` bigint(20) DEFAULT NULL,
+  `MDecShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `MDecShare_Pledge` bigint(20) DEFAULT NULL,
+  `MShare_Own` bigint(20) DEFAULT NULL,
+  `MShare_Depository` bigint(20) DEFAULT NULL,
+  `MShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `MShare_Pledge` bigint(20) DEFAULT NULL,
+  `MShare_AccPriv` bigint(20) DEFAULT NULL,
+  `IdNote` text,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `ShareAdjust_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ShareBal`
+--
+
+DROP TABLE IF EXISTS `ShareBal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ShareBal` (
+  `Date` date NOT NULL,
+  `Market` text,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `JobTitle` text,
+  `Name` text,
+  `AppointHoldVol` bigint(20) DEFAULT NULL,
+  `HoldVol` bigint(20) DEFAULT NULL,
+  `Pledge` bigint(20) DEFAULT NULL,
+  `PledgeRatio` double DEFAULT NULL,
+  `PartyHoldVol` bigint(20) DEFAULT NULL,
+  `PartyPledgeVol` bigint(20) DEFAULT NULL,
+  `PartyPledgeRatio` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `ShareBal_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ShareNotXfer`
+--
+
+DROP TABLE IF EXISTS `ShareNotXfer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ShareNotXfer` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `DeclareDate` date DEFAULT NULL,
+  `Symbol` text,
+  `StockName` text,
+  `Declarant` text,
+  `Name` text,
+  `NotXferShare_Own` bigint(20) DEFAULT NULL,
+  `NotXferShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `Share_Own` bigint(20) DEFAULT NULL,
+  `Share_RetainedTrust` bigint(20) DEFAULT NULL,
+  `EstiXferShare_Own` bigint(20) DEFAULT NULL,
+  `EstiXferShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `NotXferReason` text,
+  `Market` varchar(128) NOT NULL,
+  PRIMARY KEY (`Date`,`Market`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SharePledge`
+--
+
+DROP TABLE IF EXISTS `SharePledge`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SharePledge` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` text,
+  `StockName` text,
+  `PledgorId` text,
+  `Pledgor` text,
+  `PledgeChgDate` date DEFAULT NULL,
+  `Pledge` bigint(20) DEFAULT NULL,
+  `CancelPledge` bigint(20) DEFAULT NULL,
+  `AccPledge` bigint(20) DEFAULT NULL,
+  `Pledgee` text,
+  `Note` text,
+  `DeclareDate` date DEFAULT NULL,
+  `FinanceHoldCorp` text,
+  `Market` varchar(128) NOT NULL,
+  PRIMARY KEY (`Date`,`Market`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ShareStruct`
+--
+
+DROP TABLE IF EXISTS `ShareStruct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ShareStruct` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Shareholder` text,
+  `HolderCount` bigint(20) DEFAULT NULL,
+  `HoldVol` bigint(20) DEFAULT NULL,
+  `HoldRatio` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `ShareStruct_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ShareXfer`
+--
+
+DROP TABLE IF EXISTS `ShareXfer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ShareXfer` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `ShareAdjustStatus` text,
+  `DeclareDate` date DEFAULT NULL,
+  `Symbol` text,
+  `StockName` text,
+  `Declarant` text,
+  `Name` text,
+  `EstiXferMethod` text,
+  `EstiXferShare` bigint(20) DEFAULT NULL,
+  `MaxShareXfer_TTime` bigint(20) DEFAULT NULL,
+  `Assignee` text,
+  `Share_Own` bigint(20) DEFAULT NULL,
+  `Share_RetainedTrust` bigint(20) DEFAULT NULL,
+  `EstiXferShare_Own` bigint(20) DEFAULT NULL,
+  `EstiXferShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `EstiAfterXferShare_Own` bigint(20) DEFAULT NULL,
+  `EstiAfterXferShare_RetainedTrust` bigint(20) DEFAULT NULL,
+  `ValidXferPeriod` text,
+  `DeclareOfNotXfer` tinyint(1) DEFAULT NULL,
+  `Market` varchar(128) NOT NULL,
+  PRIMARY KEY (`Date`,`Market`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SupConfirmSum`
+--
+
+DROP TABLE IF EXISTS `SupConfirmSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SupConfirmSum` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `AuditCommittee` tinyint(1) DEFAULT NULL,
+  `FinReportSupervisor` text,
+  `SupervisorSeats` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `SupConfirmSum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `SymbolCat`
+--
+
+DROP TABLE IF EXISTS `SymbolCat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `SymbolCat` (
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `ProdType` text,
+  `Sect` text,
+  `Category` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`Symbol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Symbols`
+--
+
+DROP TABLE IF EXISTS `Symbols`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Symbols` (
+  `Date` date DEFAULT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `ProdType` text,
+  `Sect` text,
+  `PubDate` date DEFAULT NULL,
+  `IsinCode` text,
+  `CFICode` text,
+  `CorpName` text,
+  `Address` text,
+  `GovUniNum` text,
+  `Chairman` text,
+  `GM` text,
+  `Spokesman` text,
+  `SpokesmanTitle` text,
+  `SpokesmanAgent` text,
+  `Telephone` text,
+  `EstablishDate` date DEFAULT NULL,
+  `BVPS` text,
+  `PaidInCap` double DEFAULT NULL,
+  `IssueShares` bigint(20) DEFAULT NULL,
+  `PrivShare` bigint(20) DEFAULT NULL,
+  `PrefShare` bigint(20) DEFAULT NULL,
+  `FinReportType` text,
+  `StkXferAgency` text,
+  `StkXferAgencyTel` text,
+  `StkXferAgencyAddr` text,
+  `VisaCPA` text,
+  `VisaAccountant` text,
+  `VisaAccountant2` text,
+  `StkName_en_short` text,
+  `Address_en` text,
+  `Fax` text,
+  `Email` text,
+  `Website` text,
+  `RelateWebsite` text,
+  `AliasList` text,
+  `Category` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`Symbol`),
+  KEY `Symbols_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TDate`
+--
+
+DROP TABLE IF EXISTS `TDate`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TDate` (
+  `Date` date NOT NULL,
+  `tw` int(11) DEFAULT NULL,
+  `cn` int(11) DEFAULT NULL,
+  `us` int(11) DEFAULT NULL,
+  `hk` int(11) DEFAULT NULL,
+  `jp` int(11) DEFAULT NULL,
+  `kr` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TWDB_TIME`
+--
+
+DROP TABLE IF EXISTS `TWDB_TIME`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TWDB_TIME` (
+  `id` int(11) NOT NULL,
+  `time` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TdccEquity`
+--
+
+DROP TABLE IF EXISTS `TdccEquity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TdccEquity` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `HoldLevel` text,
+  `HolderCount` bigint(20) DEFAULT NULL,
+  `HoldVol` bigint(20) DEFAULT NULL,
+  `HoldRatio` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`NumSeq`),
+  KEY `TdccEquity_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TdrDivSum`
+--
+
+DROP TABLE IF EXISTS `TdrDivSum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TdrDivSum` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` text,
+  `StockName` text,
+  `ShareholderMeetYear` bigint(20) DEFAULT NULL,
+  `Period` text,
+  `DivDistrDate` date DEFAULT NULL,
+  `ShareholderMeetDate` date DEFAULT NULL,
+  `BeginRetainEarn` double DEFAULT NULL,
+  `NetProfit` double DEFAULT NULL,
+  `DistrNetProfit` double DEFAULT NULL,
+  `UnappropriatedRetainEarn` double DEFAULT NULL,
+  `CashDiv` double DEFAULT NULL,
+  `TotalCashDivAmt` double DEFAULT NULL,
+  `StkDiv_CapInc_Earn` double DEFAULT NULL,
+  `TotalStkDivAmt` double DEFAULT NULL,
+  `StkDiv_LegalReserve_CapSurplus` double DEFAULT NULL,
+  `DivDistrSum` text,
+  `Market` varchar(128) NOT NULL,
+  PRIMARY KEY (`Date`,`Market`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxHugeBargain`
+--
+
+DROP TABLE IF EXISTS `TfxHugeBargain`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxHugeBargain` (
+  `Date` date NOT NULL,
+  `Serial` varchar(128) NOT NULL,
+  `Serial2` varchar(128) NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `ExePrice` double DEFAULT NULL,
+  `Option` text,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Serial`,`Serial2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxHugeCombine`
+--
+
+DROP TABLE IF EXISTS `TfxHugeCombine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxHugeCombine` (
+  `Date` date NOT NULL,
+  `Serial` varchar(128) NOT NULL,
+  `Serial2` varchar(128) NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `ExePrice` double DEFAULT NULL,
+  `Option` text,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Serial`,`Serial2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxHugePerSymbol`
+--
+
+DROP TABLE IF EXISTS `TfxHugePerSymbol`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxHugePerSymbol` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `ExePrice` double DEFAULT NULL,
+  `Option` text,
+  `Vol` bigint(20) DEFAULT NULL,
+  `High` double DEFAULT NULL,
+  `Low` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxHugeSingle`
+--
+
+DROP TABLE IF EXISTS `TfxHugeSingle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxHugeSingle` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Symbol` text,
+  `Settle` text,
+  `ExePrice` double DEFAULT NULL,
+  `Option` text,
+  `Price` double DEFAULT NULL,
+  `Vol` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxII3`
+--
+
+DROP TABLE IF EXISTS `TfxII3`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxII3` (
+  `Date` date NOT NULL,
+  `Institute` varchar(128) NOT NULL,
+  `LongVol` bigint(20) DEFAULT NULL,
+  `LongAmt` double DEFAULT NULL,
+  `OILongVol` bigint(20) DEFAULT NULL,
+  `OILongAmt` double DEFAULT NULL,
+  `ShortVol` bigint(20) DEFAULT NULL,
+  `ShortAmt` double DEFAULT NULL,
+  `OIShortVol` bigint(20) DEFAULT NULL,
+  `OIShortAmt` double DEFAULT NULL,
+  `NetLongVol` bigint(20) DEFAULT NULL,
+  `NetLongAmt` double DEFAULT NULL,
+  `OINetLongVol` bigint(20) DEFAULT NULL,
+  `OINetLongAmt` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Institute`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxNVix`
+--
+
+DROP TABLE IF EXISTS `TfxNVix`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxNVix` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Time` text,
+  `TfxVixIdx` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxOVix`
+--
+
+DROP TABLE IF EXISTS `TfxOVix`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxOVix` (
+  `Date` date NOT NULL,
+  `NumSeq` bigint(20) NOT NULL,
+  `Time` text,
+  `TfxVixIdx` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`NumSeq`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TfxSettle`
+--
+
+DROP TABLE IF EXISTS `TfxSettle`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TfxSettle` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Settle` varchar(128) NOT NULL,
+  `SettlePrice` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`Settle`),
+  KEY `TfxSettle_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TreasurySum`
+--
+
+DROP TABLE IF EXISTS `TreasurySum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TreasurySum` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `BuyBackObjective` bigint(20) NOT NULL,
+  `BuyBackAmntUpperBound` double DEFAULT NULL,
+  `PlanBuyBackStk` double DEFAULT NULL,
+  `BuyBackPriceRangeLow` double DEFAULT NULL,
+  `BuyBackPriceRangeHigh` double DEFAULT NULL,
+  `BuyBackPeriodStart` date DEFAULT NULL,
+  `BuyBackPeriodEnd` date DEFAULT NULL,
+  `BuyBackExecDone` text,
+  `BuyBackDoneShare` double DEFAULT NULL,
+  `ExecDonePostWriteDownShare` double DEFAULT NULL,
+  `BuyBackOfPlanPercent` double DEFAULT NULL,
+  `BuyBackTotalAmount` double DEFAULT NULL,
+  `BuyBackAvgStkPrice` double DEFAULT NULL,
+  `BuyBackOfIssuedPercent` double DEFAULT NULL,
+  PRIMARY KEY (`Date`,`Symbol`,`BuyBackObjective`),
+  KEY `TreasurySum_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `TseIndexStk`
+--
+
+DROP TABLE IF EXISTS `TseIndexStk`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `TseIndexStk` (
+  `Date` date DEFAULT NULL,
+  `Rank` bigint(20) NOT NULL,
+  `Symbol` text,
+  `StockName` text,
+  `MarketCapRatio` double DEFAULT NULL,
+  PRIMARY KEY (`Rank`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Version`
+--
+
+DROP TABLE IF EXISTS `Version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Version` (
+  `_$dbname` varchar(128) NOT NULL,
+  `_$version` bigint(20) DEFAULT NULL,
+  `_$mtime` datetime NOT NULL,
+  PRIMARY KEY (`_$dbname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `Warrants`
+--
+
+DROP TABLE IF EXISTS `Warrants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Warrants` (
+  `Date` date DEFAULT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `ProdType` text,
+  `Sect` text,
+  `PubDate` date DEFAULT NULL,
+  `IsinCode` text,
+  `CFICode` text,
+  `AliasList` text,
+  PRIMARY KEY (`Symbol`),
+  KEY `Warrants_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `XDR`
+--
+
+DROP TABLE IF EXISTS `XDR`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `XDR` (
+  `Date` date NOT NULL,
+  `Symbol` varchar(128) NOT NULL,
+  `PreClose` double DEFAULT NULL,
+  `XDRPriceRef` double DEFAULT NULL,
+  `StockDiv` double DEFAULT NULL,
+  `DPS` double DEFAULT NULL,
+  `DiffXDR` double DEFAULT NULL,
+  `ExDivRight` text,
+  `LimitUp` double DEFAULT NULL,
+  `LimitDown` double DEFAULT NULL,
+  `PriceRef` double DEFAULT NULL,
+  `ExDPSPrice` double DEFAULT NULL,
+  `Market` text,
+  PRIMARY KEY (`Date`,`Symbol`),
+  KEY `XDR_Symbol_Date` (`Symbol`,`Date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `_Symbols`
+--
+
+DROP TABLE IF EXISTS `_Symbols`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `_Symbols` (
+  `Symbol` varchar(128) NOT NULL,
+  `StockName` text,
+  `Market` text,
+  `ProdType` text,
+  `Sect` text,
+  `PubDate` date DEFAULT NULL,
+  `UpdateDate` date DEFAULT NULL,
+  `IsinCode` text,
+  `CFICode` text,
+  PRIMARY KEY (`Symbol`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-02-17 18:35:12
